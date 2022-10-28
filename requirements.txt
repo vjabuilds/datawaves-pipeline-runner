@@ -1,0 +1,19 @@
+antlr4-python3-runtime==4.9.3
+attrs==22.1.0
+certifi @ file:///croot/certifi_1665076670883/work/certifi
+distlib==0.3.6
+exceptiongroup==1.0.0
+filelock==3.8.0
+hydra-core==1.2.0
+iniconfig==1.1.1
+omegaconf==2.2.3
+packaging==21.3
+platformdirs==2.5.2
+pluggy==1.0.0
+py4j==0.10.9.5
+pyparsing==3.0.9
+pyspark==3.3.1
+pytest==7.2.0
+PyYAML==6.0
+tomli==2.0.1
+virtualenv==20.16.6
