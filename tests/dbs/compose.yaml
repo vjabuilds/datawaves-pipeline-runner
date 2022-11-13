@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+    - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pwd123
+      - POSTGRES_USER=datawaves # the database will default to datawaves, instead of postgres
+    volumes:
+      - ./initialize_data_postgres.sql:/docker-entrypoint-initdb.d/init.sql:ro
