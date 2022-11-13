@@ -33,3 +33,9 @@ class DataContainer(ABC):
         """
         pass
     
+    @abstractmethod
+    def read_field(self, field_name: str) -> List:
+        """
+        Reads the value from a given field, as a list.
+        """
+        pass

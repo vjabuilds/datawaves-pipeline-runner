@@ -28,7 +28,7 @@ class PandasCsvDataContainer(DataContainer):
         Renames the field called old_name to  new_name
         """
         self._df[new_name] = self._df[old_name]
-        self._df.drop(old_name)
+        self._df.drop(old_name, axis=1, inplace=True)
         return True
 
     def map_field(self, field_name: str, mapping_func: Callable):
@@ -36,3 +36,9 @@ class PandasCsvDataContainer(DataContainer):
         Transforms the specified field using the mapping function. 
         """
         self._df[field_name] = self._df[field_name].apply(mapping_func)
+
+    def read_field(self, field_name: str) -> List:
+        """
+        Reads the value from a given field, as a list.
+        """
+        return list(self._df[field_name])
