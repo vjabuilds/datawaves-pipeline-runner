@@ -18,3 +18,4 @@ PyYAML==6.0
 tomli==2.0.1
 virtualenv==20.16.6
 findspark
+pandas
