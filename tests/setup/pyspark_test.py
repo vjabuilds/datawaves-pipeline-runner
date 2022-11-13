@@ -1,20 +1,17 @@
-import pytest
-import pyspark
-from hydra import initialize, compose
+from pyspark.sql import SparkSession
+from omegaconf import DictConfig
 
-@pytest.fixture
-def hydra_cfg():
-    with initialize(version_base=None, config_path="../../datawaves-pipeline-runner/configs"):
-        cfg = compose(config_name="config")
-        return cfg
+def test_hydra_default(hydra_cfg: DictConfig):
+    """
+    Tests to see if the loaded config has been loaded correctly
+    """
+    assert hydra_cfg.spark == {"head": "local[*]"} and hydra_cfg.name == "datawaves-pipeline-runner"
 
-def test_hydra_default(hydra_cfg):
-    assert hydra_cfg == {
-        "spark" : {
-            "head" : "local[*]"
-        },
-        "name": "datawaves-pipeline-runner"
-    }
 
-def test_pyspark_install(hydra_cfg):
-    sc = pyspark.SparkContext(hydra_cfg.spark.head, "PySpark install test")
+def test_pyspark_local(spark: SparkSession):
+    """
+    Instantiates a local spark context. If instantiation fails, the test will fail.
+
+    Note: Make sure to use Java 11 or lower (spark instantiation will fail on higher versions)
+    """
+    assert spark is not None
