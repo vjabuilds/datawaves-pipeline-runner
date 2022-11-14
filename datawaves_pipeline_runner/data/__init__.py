@@ -1,3 +1,4 @@
 from .data_container import DataContainer
 from .pandas_csv_data_container import PandasCsvDataContainer
 from .structured_data_container import StructuredDataContainer
+from .dataset import Dataset
