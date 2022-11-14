@@ -1,41 +1,27 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List, Callable
+from typing import List
 
 class DataContainer(ABC):
     """
     A container that holds data which can be fed to the pipeline.
     """
-    @abstractmethod
-    def get_field_names(self) -> List[str]:
+
+    def __init__(self, name: str):
+        self._name = name
+
+    def get_name(self) -> str:
         """
-        Retruns a list of all field names as defined in the data container.
+        Returns the name of the data container
         """
-        pass
+        return self._name
 
     @abstractmethod
-    def get_field_types(self) -> Dict[str, str]:
+    def get_shape(self) -> List[int]:
         """
-        Returns a list of all field types as defined in the data container
-        """
-        pass
-
-    @abstractmethod
-    def rename_field(self, old_name: str, new_name: str):
-        """
-        Renames the field called old_name to  new_name
-        """
-        pass
-
-    @abstractmethod
-    def map_field(self, field_name: str, mapping_func: Callable):
-        """
-        Transforms the specified field using the mapping function. 
-        """
-        pass
-    
-    @abstractmethod
-    def read_field(self, field_name: str) -> List:
-        """
-        Reads the value from a given field, as a list.
+        Returns the shape of the data. It should be a:
+            2D tensor for structured data
+            3D tensor for sequence data
+            4D tensor for image data
+        The first axis always refers to a specific data instance
         """
         pass

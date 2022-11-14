@@ -1,10 +1,13 @@
-from .data_container import DataContainer
+from .structured_data_container import StructuredDataContainer
 from typing import Dict, List, Callable
 import pandas as pd
 
-class PandasCsvDataContainer(DataContainer):
-
-    def __init__(self, csv_path: str):
+class PandasCsvDataContainer(StructuredDataContainer):
+    """
+    A structured data contianer backed by a pandas csv file.
+    """
+    def __init__(self, name:str, csv_path: str):
+        super().__init__(name)
         self._csv_path = csv_path
         self._df = pd.read_csv(csv_path)
 
@@ -42,3 +45,9 @@ class PandasCsvDataContainer(DataContainer):
         Reads the value from a given field, as a list.
         """
         return list(self._df[field_name])
+
+    def get_shape(self) -> List[int]:
+        """
+        Returns a 2D tensor in the form of [rows, cols]
+        """
+        return list(self._df.shape)

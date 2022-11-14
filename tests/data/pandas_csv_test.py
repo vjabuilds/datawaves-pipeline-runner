@@ -7,7 +7,7 @@ def dataset() -> PandasCsvDataContainer:
     """
     A pytest fixture which loads in the pandas csv dataset
     """
-    return PandasCsvDataContainer('./tests/data/flowers.csv')
+    return PandasCsvDataContainer('test', './tests/data/flowers.csv')
 
 def test_loaded(dataset: PandasCsvDataContainer):
     """
@@ -42,3 +42,6 @@ def test_rename(dataset: PandasCsvDataContainer, field_name: str):
     data = dataset.read_field(field_name)
     dataset.map_field(field_name, mapping)
     assert [mapping(d) for d in data] == dataset.read_field(field_name)
+
+def test_shape(dataset: PandasCsvDataContainer):
+    assert [150, 5] == dataset.get_shape()
