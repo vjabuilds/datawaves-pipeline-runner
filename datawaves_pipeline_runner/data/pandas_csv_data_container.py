@@ -4,7 +4,7 @@ import pandas as pd
 
 class PandasCsvDataContainer(StructuredDataContainer):
     """
-    A structured data contianer backed by a pandas csv file.
+    A structured data container backed by a pandas csv file.
     """
     def __init__(self, name:str, csv_path: str):
         super().__init__(name)
@@ -13,7 +13,7 @@ class PandasCsvDataContainer(StructuredDataContainer):
 
     def get_field_names(self) -> List[str]:
         """
-        Retruns a list of all field names as defined in the data container.
+        Returns a list of all field names as defined in the data container.
         """
         return list(self._df.columns)
 
