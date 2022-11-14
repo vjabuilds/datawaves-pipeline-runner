@@ -1,5 +1,5 @@
 from .structured_data_container import StructuredDataContainer
-from typing import Dict, List, Callable
+from typing import Dict, List, Callable, Iterable, Optional
 import pandas as pd
 
 class PandasCsvDataContainer(StructuredDataContainer):
@@ -34,11 +34,16 @@ class PandasCsvDataContainer(StructuredDataContainer):
         self._df.drop(old_name, axis=1, inplace=True)
         return True
 
-    def map_field(self, field_name: str, mapping_func: Callable):
+    def map_field(self, field_name: str, mapping_func: Callable, new_name: Optional[str] = None):
         """
-        Transforms the specified field using the mapping function. 
+        Transforms the specified field using the mapping function
+        - field_name - the field which is to be transformed
+        - mapping_func - the function which will be applied to the field
+        - new_name - optional name of the transformed data. If none, will overwrite old data
         """
-        self._df[field_name] = self._df[field_name].apply(mapping_func)
+        if(new_name is None):
+            new_name = field_name
+        self._df[new_name] = self._df[field_name].apply(mapping_func)
 
     def read_field(self, field_name: str) -> List:
         """
@@ -51,3 +56,6 @@ class PandasCsvDataContainer(StructuredDataContainer):
         Returns a 2D tensor in the form of [rows, cols]
         """
         return list(self._df.shape)
+
+    def insert_field(self, name: str, data: Iterable):
+        self._df[name] = data

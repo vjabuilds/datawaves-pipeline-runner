@@ -37,7 +37,7 @@ def test_rename(dataset: PandasCsvDataContainer, old_name: str):
     assert rename_result and new_name in all_names and old_name not in all_names
 
 @pytest.mark.parametrize('field_name', ['sepal length', 'sepal width', 'petal length', 'petal width'])
-def test_rename(dataset: PandasCsvDataContainer, field_name: str):
+def test_map_field(dataset: PandasCsvDataContainer, field_name: str):
     mapping = lambda x: x * x
     data = dataset.read_field(field_name)
     dataset.map_field(field_name, mapping)
@@ -45,3 +45,15 @@ def test_rename(dataset: PandasCsvDataContainer, field_name: str):
 
 def test_shape(dataset: PandasCsvDataContainer):
     assert [150, 5] == dataset.get_shape()
+
+def test_insert_field(dataset: PandasCsvDataContainer):
+    rows = dataset.get_shape()[0]
+    dataset.insert_field('new field', range(rows))
+    assert [150, 6] == dataset.get_shape() and list(range(rows)) == dataset.read_field('new field')
+
+@pytest.mark.parametrize('field_name', ['sepal length', 'sepal width', 'petal length', 'petal width'])
+def test_map_with_rename(dataset: PandasCsvDataContainer, field_name: str):
+    mapping = lambda x: x * x
+    data = dataset.read_field(field_name)
+    dataset.map_field(field_name, mapping, 'mapped')
+    assert [150, 6] == dataset.get_shape() and [mapping(d) for d in data] == dataset.read_field('mapped')
