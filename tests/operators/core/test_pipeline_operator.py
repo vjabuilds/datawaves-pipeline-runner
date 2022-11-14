@@ -12,3 +12,15 @@ def test_pipeline_operator(count, capfd):
     pipeline.run()
     captured = capfd.readouterr()
     assert captured.out == ''.join(['hello' + str(i) + '\n' for i in range(len(printer_list))])
+
+def test_nested_pipelines(capfd):
+    """
+    Tests to see if pipeline invokes on a nested list.
+    """
+    printer_list = [PrinterOperator('test' + str(i), 'hello') for i in range(2)]
+    pipelines = [PipelineOperator('test', printer_list) for i in range(2)]
+
+    final_pipeline = PipelineOperator('test', pipelines)
+    final_pipeline.run()
+    captured = capfd.readouterr()
+    assert captured.out == ''.join(['hello\n' for i in range(4)])
