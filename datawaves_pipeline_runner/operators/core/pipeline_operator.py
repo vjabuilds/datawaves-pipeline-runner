@@ -3,7 +3,8 @@ from ...data import Dataset
 from typing import List, Optional
 
 class PipelineOperator(AbstractOperator):
-    def __init__(self, ops: Optional[List[AbstractOperator]] = None):
+    def __init__(self, name: str, ops: Optional[List[AbstractOperator]] = None):
+        super().__init__(name)
         if ops is None:
             self._ops = []
         else:
