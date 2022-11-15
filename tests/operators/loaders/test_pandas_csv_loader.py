@@ -1,6 +1,6 @@
 import pytest
 from datawaves_pipeline_runner.operators.loaders import PandasCsvLoader
-from datawaves_pipeline_runner.data import PandasCsvDataContainer
+from datawaves_pipeline_runner.data import PandasDataContainer
 from datawaves_pipeline_runner.data import Dataset
 
 def test_load_pandas_csv():
@@ -18,7 +18,7 @@ def test_load_read_pandas_csv(name: str):
     ds = Dataset()
     loader = PandasCsvLoader('test', name, './tests/data/flowers.csv')
     loader._operate(ds)
-    assert isinstance(ds.get_data(name), PandasCsvDataContainer)
+    assert isinstance(ds.get_data(name), PandasDataContainer)
 
 def test_load_schema_pandas_csv():
     ds = Dataset()

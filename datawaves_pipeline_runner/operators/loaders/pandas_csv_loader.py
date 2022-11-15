@@ -1,9 +1,10 @@
 from .base_loader import BaseLoader
-from ...data import Dataset, PandasCsvDataContainer
+from ...data import Dataset, PandasDataContainer
+import pandas as pd
 
 class PandasCsvLoader(BaseLoader):
     """
-    Class that produces a PandasCsvDataContainer and inserts it into the current Dataset.
+    Class that produces a PandasDataContainer and inserts it into the current Dataset.
     """
     def __init__(self, name: str, data_container_name: str, csv_path: str):
         """
@@ -17,7 +18,7 @@ class PandasCsvLoader(BaseLoader):
 
     def _load(self, ds: Dataset):
         """
-        Loads in the PandasCsvDataContainer.
+        Loads in the PandasDataContainer.
         """
-        dc = PandasCsvDataContainer(self._data_container_name, self._csv_path)
+        dc = PandasDataContainer(self._data_container_name, pd.read_csv(self._csv_path))
         ds.insert_data(dc)

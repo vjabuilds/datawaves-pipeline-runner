@@ -1,11 +1,12 @@
 import pytest
-from datawaves_pipeline_runner.data import Dataset, PandasCsvDataContainer, StructuredDataContainer
+from datawaves_pipeline_runner.data import Dataset, PandasDataContainer, StructuredDataContainer
 from datawaves_pipeline_runner.operators.transforms import StructuredLambdaOperator
+import pandas as pd
 
 @pytest.fixture
 def dataset() -> Dataset:
     ds = Dataset()
-    ds.insert_data(PandasCsvDataContainer('test', './tests/data/flowers.csv'))
+    ds.insert_data(PandasDataContainer('test', pd.read_csv('./tests/data/flowers.csv')))
     return ds
 
 @pytest.mark.parametrize('func', [lambda x: x*x, lambda x: 0, lambda x: -x])

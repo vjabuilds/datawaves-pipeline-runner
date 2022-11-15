@@ -1,8 +1,7 @@
 from pytest import fixture
 import pytest
-from datawaves_pipeline_runner.data import Dataset, PandasCsvDataContainer
-
-
+from datawaves_pipeline_runner.data import Dataset, PandasDataContainer
+import pandas as pd
 
 @fixture
 def dataset() -> Dataset:
@@ -10,8 +9,8 @@ def dataset() -> Dataset:
     Pytest fixture to create a dataset
     """
     ds = Dataset()
-    ds.insert_data(PandasCsvDataContainer('test', './tests/data/flowers.csv'))
-    ds.insert_data(PandasCsvDataContainer('test_2', './tests/data/flowers.csv'))
+    ds.insert_data(PandasDataContainer('test', pd.read_csv('./tests/data/flowers.csv')))
+    ds.insert_data(PandasDataContainer('test_2', pd.read_csv('./tests/data/flowers.csv')))
     return ds
 
 @pytest.mark.parametrize('name', ['test', 'test_2'])
