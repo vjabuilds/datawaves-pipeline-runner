@@ -15,7 +15,7 @@ def props():
 
 def test_load_spark_table(spark: SparkSession, props: Dict[str, str]):
     """
-    Tests to see if a SparkDataframeTable dataset will be loaded
+    Tests to see if a SparkDataContainer will be loaded
     """
     loader = SparkTableLoader('test', 'test', spark, 'flowers', 'jdbc:postgresql://localhost:5432/datawaves', props)
     loader._operate(Dataset())
@@ -23,7 +23,7 @@ def test_load_spark_table(spark: SparkSession, props: Dict[str, str]):
 @pytest.mark.parametrize('name', ['test1', 'test2', 'test3'])
 def test_load_read_spark_table(spark: SparkSession, props: Dict[str, str],  name: str):
     """
-    Tests to see if a SparkDataframeTable dataset will be loaded and reads the result
+    Tests to see if a SparkDataContainer will be loaded and reads the result
     """
     ds = Dataset()
     loader = SparkTableLoader('test', name, spark, 'flowers', 'jdbc:postgresql://localhost:5432/datawaves', props)
@@ -36,3 +36,4 @@ def test_load_schema_spark_table(spark: SparkSession, props: Dict[str, str]):
     loader = SparkTableLoader('test', 'test', spark, 'flowers', 'jdbc:postgresql://localhost:5432/datawaves', props)
     loader._operate(ds)
     ds.get_data(name).get_field_names() == ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']   
+    
