@@ -3,7 +3,6 @@ from typing import List, Dict, Callable, Optional, Iterable
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.types import DoubleType
 import pyspark.sql.functions as f
-import uuid
 
 class SparkDataframeContainer(StructuredDataContainer):
     def __init__(self, name: str, spark: SparkSession, df: DataFrame):
@@ -54,3 +53,11 @@ class SparkDataframeContainer(StructuredDataContainer):
         Currently not implemented for spark based containers.
         """
         raise NotImplementedError
+    
+    def serialize(self, format: str, **kwargs):
+        partition_count = 1 if 'coalesce' not in kwargs else kwargs['coalesce']
+        self._df =self._df.coalesce(partition_count)
+        obj =self._df.write.format(format)
+        for key in kwargs:
+            obj.option(key, kwargs[key])
+        obj.save()

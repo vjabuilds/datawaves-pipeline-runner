@@ -1,6 +1,7 @@
 from .structured_data_container import StructuredDataContainer
 from typing import Dict, List, Callable, Iterable, Optional
 import pandas as pd
+import inspect
 
 class PandasDataContainer(StructuredDataContainer):
     """
@@ -58,3 +59,9 @@ class PandasDataContainer(StructuredDataContainer):
 
     def insert_field(self, name: str, data: Iterable):
         self._df[name] = data
+
+    def serialize(self, format: str, **kwargs):
+        methods = inspect.getmembers(self._df, predicate = inspect.ismethod)
+        assert 'to_' + format in [m[0] for m in methods]
+        index = [m[0] for m in methods].index('to_' + format)
+        methods[index][1](**kwargs)

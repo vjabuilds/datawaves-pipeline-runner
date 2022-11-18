@@ -1,7 +1,10 @@
 import pytest
-from datawaves_pipeline_runner.data import SparkDataframeContainer
+from datawaves_pipeline_runner.data import SparkDataframeContainer, PandasDataContainer
 import pandas as pd
 from pyspark.sql import SparkSession
+import uuid
+import os
+import shutil
 
 @pytest.fixture
 def dataset(spark: SparkSession):
@@ -64,3 +67,19 @@ def test_map_with_rename(dataset: SparkDataframeContainer, field_name: str):
     data = dataset.read_field(field_name)
     dataset.map_field(field_name, mapping, 'mapped')
     assert [150, 6] == dataset.get_shape() and [mapping(d) for d in data] == dataset.read_field('mapped')
+
+def test_serialize(dataset: SparkDataframeContainer):
+    path = str(uuid.uuid4())
+
+    dataset.serialize('csv', path = path, header = 'true', coalesce = 1)
+    csvs = [p for p in os.listdir(path) if p.endswith('.csv')]
+    assert len(csvs) == 1
+
+    df = pd.read_csv(os.path.join(path, csvs[0]))
+    read_data = PandasDataContainer('new', df)
+
+    assert dataset.get_shape() == read_data.get_shape()
+    fields = dataset.get_field_names()
+    for f in fields:
+        assert dataset.read_field(f) == read_data.read_field(f)
+    shutil.rmtree(path, ignore_errors=True)

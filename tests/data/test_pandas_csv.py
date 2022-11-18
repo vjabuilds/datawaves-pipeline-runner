@@ -2,6 +2,8 @@ import pytest
 from pytest import fixture
 from datawaves_pipeline_runner.data import PandasDataContainer
 import pandas as pd
+import uuid
+import os
 
 @fixture
 def dataset() -> PandasDataContainer:
@@ -58,3 +60,14 @@ def test_map_with_rename(dataset: PandasDataContainer, field_name: str):
     data = dataset.read_field(field_name)
     dataset.map_field(field_name, mapping, 'mapped')
     assert [150, 6] == dataset.get_shape() and [mapping(d) for d in data] == dataset.read_field('mapped')
+
+def test_serialize(dataset: PandasDataContainer):
+    file_name = str(uuid.uuid4()) + '.csv'
+    dataset.serialize('csv', path_or_buf = file_name, index = False)
+    df = pd.read_csv(file_name)
+    read_data = PandasDataContainer('new', df)
+    assert dataset.get_shape() == read_data.get_shape()
+    fields = dataset.get_field_names()
+    for f in fields:
+        assert dataset.read_field(f) == read_data.read_field(f)
+    os.remove(file_name)
