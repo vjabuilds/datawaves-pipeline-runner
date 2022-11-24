@@ -52,12 +52,3 @@ class AbstractOperator(ABC):
         Does not need to set the name and class of the operator.
         """
         pass
-
-    # @abstractmethod
-    # def from_dictionary(OmegaConf) -> 'AbstractOperator':
-    #     """
-    #     A factory method that loads in the given OmegaConf config file and returns the operator.
-
-    #     - returns : a concrete implementation of the AbstractOperator as defined in the passed config.
-    #     """
-    #     pass
