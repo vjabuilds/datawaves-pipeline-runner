@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from .data_container import DataContainer
+from ..data_container import DataContainer
 from typing import Dict, Iterable, List, Callable, Optional
 
 class StructuredDataContainer(DataContainer):
