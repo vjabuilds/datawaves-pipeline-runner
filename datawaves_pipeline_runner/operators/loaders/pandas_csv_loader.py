@@ -1,6 +1,7 @@
 from .base_loader import BaseLoader
 from ...data import Dataset, PandasDataContainer
 import pandas as pd
+from omegaconf import OmegaConf
 
 class PandasCsvLoader(BaseLoader):
     """
@@ -22,3 +23,7 @@ class PandasCsvLoader(BaseLoader):
         """
         dc = PandasDataContainer(self._data_container_name, pd.read_csv(self._csv_path))
         ds.insert_data(dc)
+
+    def _populate_dictionary(self, dict: OmegaConf):
+        dict.data_container_name = self._data_container_name
+        dict.csv_path = self._csv_path
