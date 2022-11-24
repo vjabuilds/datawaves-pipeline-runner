@@ -4,12 +4,12 @@ from typing import List, Optional
 from omegaconf import OmegaConf
 
 class PipelineOperator(AbstractOperator):
-    def __init__(self, name: str, ops: Optional[List[AbstractOperator]] = None):
+    def __init__(self, name: str, operators: Optional[List[AbstractOperator]] = None):
         super().__init__(name)
-        if ops is None:
+        if operators is None:
             self._ops = []
         else:
-            self._ops = ops
+            self._ops = operators
         self._ds = Dataset()
 
     def _operate(self, ds: Dataset):
