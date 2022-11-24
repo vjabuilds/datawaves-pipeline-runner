@@ -1,6 +1,7 @@
 from .abstract_operator import AbstractOperator
 from ...data import Dataset
 from typing import List, Optional
+from omegaconf import OmegaConf
 
 class PipelineOperator(AbstractOperator):
     def __init__(self, name: str, ops: Optional[List[AbstractOperator]] = None):
@@ -20,3 +21,10 @@ class PipelineOperator(AbstractOperator):
         Executes the pipeline.
         """
         self._operate(self._ds)
+
+    def _populate_dictionary(self, dict: OmegaConf):
+        dicts = []
+        for op in self._ops:
+            dicts.append(op.to_dictionary())
+        dict.operators = dicts
+        
