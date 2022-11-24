@@ -12,8 +12,7 @@ class SparkLoader(BaseLoader):
     def _populate_dictionary(self, dict: OmegaConf):
         dict.data_container_name = self._data_container_name
         hydra_path, config_name = get_configuration(self._spark)
-        dict.spark_hydra_path = hydra_path
-        dict.spark_config_name = config_name
+        dict.spark = f'${{spark_resolver:{hydra_path}, {config_name}}}'
         self._populate_query(dict)
 
     @abstractmethod

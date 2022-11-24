@@ -56,6 +56,7 @@ def test_dictionary(query: str, props: Dict[str, str]):
     assert read_path == hydra_path and read_name == config_name
 
     conf = loader.to_dictionary()
+    OmegaConf.register_resolver('spark_resolver', get_spark)
     target = OmegaConf.create({
         'name': name,
         '_target_': 'datawaves_pipeline_runner.operators.loaders.spark_loaders.spark_sql_loader.SparkSqlLoader',
@@ -63,7 +64,6 @@ def test_dictionary(query: str, props: Dict[str, str]):
         'url': url,
         'query': query,
         'props': props,
-        'spark_hydra_path': hydra_path,
-        'spark_config_name': config_name
+        'spark': f'${{spark_resolver:{hydra_path}, {config_name}}}'
     })
     assert conf == target

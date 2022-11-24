@@ -60,7 +60,6 @@ def test_dictionary(props: Dict[str, str]):
         'url': url,
         'table_name': table_name,
         'props': props,
-        'spark_hydra_path': hydra_path,
-        'spark_config_name': config_name
+        'spark': f'${{spark_resolver:{hydra_path}, {config_name}}}'
     })
     assert conf == target
