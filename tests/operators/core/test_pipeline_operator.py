@@ -28,8 +28,6 @@ def test_nested_pipelines(capfd):
     pipelines = [PipelineOperator("test", printer_list) for i in range(2)]
 
     final_pipeline = PipelineOperator("test", pipelines)
-    import pdb
-    pdb.set_trace()
     final_pipeline.run()
     captured = capfd.readouterr()
     assert captured.out == "".join(["hello\n" for i in range(4)])
@@ -48,7 +46,7 @@ def test_dictionary(count: int):
     target = OmegaConf.create(
         {
             "name": "test",
-            "type": "datawaves_pipeline_runner.operators.core.pipeline_operator.PipelineOperator",
+            "_target_": "datawaves_pipeline_runner.operators.core.pipeline_operator.PipelineOperator",
         }
     )
     configs = [p.to_dictionary() for p in printer_list]

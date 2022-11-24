@@ -22,7 +22,7 @@ def test_dictionary(msg: str):
     dict = op.to_dictionary()
     target = OmegaConf.create({
         'name': 'test',
-        'type': 'datawaves_pipeline_runner.operators.loggers.printer_operator.PrinterOperator',
+        '_target_': 'datawaves_pipeline_runner.operators.loggers.printer_operator.PrinterOperator',
         'msg': msg
     })
     assert dict == target

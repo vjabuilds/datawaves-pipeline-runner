@@ -41,7 +41,7 @@ class AbstractOperator(ABC):
 
         dict = OmegaConf.create()
         dict.name = self.get_name()
-        dict.type = self.__classname()
+        dict._target_ = self.__classname()
         self._populate_dictionary(dict)
         return dict
 
