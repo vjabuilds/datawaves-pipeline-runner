@@ -1,6 +1,8 @@
 from ..core import AbstractOperator
 from ...data import Dataset, StructuredDataContainer
+from ..exceptions import SerializationNotSupported
 from typing import Callable, Optional
+from omegaconf import OmegaConf
 
 class StructuredLambdaOperator(AbstractOperator):
     """
@@ -35,3 +37,9 @@ class StructuredLambdaOperator(AbstractOperator):
         dc = ds.get_data(self._dc_name)
         assert isinstance(dc, StructuredDataContainer)
         dc.map_field(self._field_name, self._lambda, self._new_name)
+
+    def _populate_dictionary(self, dict: OmegaConf):
+        """
+        Serialization of arbitrary functions is not supported currently.
+        """
+        raise SerializationNotSupported(type(self))

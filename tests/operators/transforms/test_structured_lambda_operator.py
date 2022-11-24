@@ -1,6 +1,7 @@
 import pytest
 from datawaves_pipeline_runner.data import Dataset, PandasDataContainer, StructuredDataContainer
 from datawaves_pipeline_runner.operators.transforms import StructuredLambdaOperator
+from datawaves_pipeline_runner.operators.exceptions import SerializationNotSupported
 import pandas as pd
 
 @pytest.fixture
@@ -32,3 +33,16 @@ def test_no_new_column_structured_lambda(dataset: Dataset, func):
     op._operate(dataset)
 
     assert [func(x) for x in old_data] == dc.read_field(old_name)
+
+def test_dictionary():
+    """
+    Checks to see if the structured lambda to dictionary operation will fail in a predictable way.
+    """
+    old_name = 'sepal length'
+    dc_name = 'test'
+    op = StructuredLambdaOperator('test_op', lambda x: x * x, dc_name, old_name)
+    try:
+        op.to_dictionary()
+    except SerializationNotSupported as e:
+        return
+    assert False
