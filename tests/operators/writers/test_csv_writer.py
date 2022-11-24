@@ -6,6 +6,7 @@ from datawaves_pipeline_runner.operators.writers import CsvWriter
 from datawaves_pipeline_runner.operators.loaders import PandasCsvLoader
 from datawaves_pipeline_runner.operators.loaders.spark_loaders import SparkTableLoader
 from datawaves_pipeline_runner.data import Dataset, PandasDataContainer, SparkDataframeContainer
+from omegaconf import OmegaConf
 
 @pytest.fixture
 def dataset():
@@ -45,3 +46,15 @@ def test_serialize_spark(spark_ds):
     csv._operate(ds)
     assert os.path.exists(path) and os.path.exists(os.path.join(path, '_SUCCESS'))
     shutil.rmtree(path)
+
+def test_dictionary():
+    name = 'test'
+    path = 'test_123'
+    csv = CsvWriter(name, name, path)
+    conf = csv.to_dictionary()
+    assert conf == OmegaConf.create({
+        'name': name,
+        '_target_': 'datawaves_pipeline_runner.operators.writers.csv_writer.CsvWriter',
+        'dc_name': name,
+        'path': path
+    })

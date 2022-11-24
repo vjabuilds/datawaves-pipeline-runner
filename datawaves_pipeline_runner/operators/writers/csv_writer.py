@@ -1,5 +1,6 @@
 from ..core import AbstractOperator
 from ...data import Dataset, PandasDataContainer, SparkDataframeContainer
+from omegaconf import OmegaConf
 
 class CsvWriter(AbstractOperator):
     def __init__(self, name: str, dc_name: str, path: str):
@@ -16,4 +17,7 @@ class CsvWriter(AbstractOperator):
         else:
             raise NotImplementedError
         return super()._operate(ds)
-        
+    
+    def _populate_dictionary(self, dict: OmegaConf):
+        dict.dc_name = self._dc_name
+        dict.path = self._path
