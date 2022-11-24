@@ -4,6 +4,8 @@ from datawaves_pipeline_runner.operators.loaders.spark_loaders import SparkTable
 from datawaves_pipeline_runner.data import SparkDataframeContainer
 from datawaves_pipeline_runner.data import Dataset
 from pyspark.sql import SparkSession
+from omegaconf import OmegaConf
+from datawaves_pipeline_runner.util import get_configuration, get_spark
 
 @pytest.fixture
 def props():
@@ -37,3 +39,28 @@ def test_load_schema_spark_table(spark: SparkSession, props: Dict[str, str]):
     loader._operate(ds)
     ds.get_data(name).get_field_names() == ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']   
     
+def test_dictionary(props: Dict[str, str]):
+    url = 'jdbc:postgresql://localhost:5432/datawaves'
+    table_name = 'flowers'
+    name = 'test'
+    hydra_path = '../configs'
+    config_name = 'config'
+    spark = get_spark(hydra_path, config_name)
+
+    loader = SparkTableLoader(name, name, spark, table_name, url, props)
+    read_path, read_name = get_configuration(spark)
+
+    assert read_path == hydra_path and read_name == config_name
+
+    conf = loader.to_dictionary()
+    target = OmegaConf.create({
+        'name': name,
+        '_target_': 'datawaves_pipeline_runner.operators.loaders.spark_loaders.spark_table_loader.SparkTableLoader',
+        'data_container_name': name,
+        'url': url,
+        'table_name': table_name,
+        'props': props,
+        'spark_hydra_path': hydra_path,
+        'spark_config_name': config_name
+    })
+    assert conf == target

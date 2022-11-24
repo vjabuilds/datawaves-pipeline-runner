@@ -2,6 +2,7 @@ from .spark_loader import SparkLoader
 from pyspark.sql import SparkSession
 from ....data import Dataset, SparkDataframeContainer
 from typing import Dict
+from omegaconf import OmegaConf
 
 class SparkSqlLoader(SparkLoader):
     def __init__(self, name: str, data_container_name: str, spark: SparkSession, query: str, url: str, props: Dict[str, str]):
@@ -31,3 +32,8 @@ class SparkSqlLoader(SparkLoader):
         builder.option('query', self._query)
         dc = SparkDataframeContainer(self._data_container_name, self._spark, builder.load())
         ds.insert_data(dc)
+
+    def _populate_query(self, dict: OmegaConf):
+        dict.query = self._query
+        dict.url = self._url
+        dict.props = self._props

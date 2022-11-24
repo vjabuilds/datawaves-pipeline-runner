@@ -2,6 +2,7 @@ from .spark_loader import SparkLoader
 from ....data import SparkDataframeContainer, Dataset
 from pyspark.sql import SparkSession
 from typing import Dict
+from omegaconf import OmegaConf
 
 class SparkTableLoader(SparkLoader):
     """
@@ -13,7 +14,10 @@ class SparkTableLoader(SparkLoader):
         - name : the name of the operator
         - data_container_name : the name of the data container that will be generated
         - table_name : the name of the table in the database
-        - props : the props dictionary which will be passed to spark. Must contain the following keys:
+        - props : the props def _populate_query(self, dict: OmegaConf):
+        dict.query = self._query
+        dict.url = self._url
+        dict.props = self._propsdictionary which will be passed to spark. Must contain the following keys:
             user : the username to be used when connecting to the database
             password : the password to be used when connecting to the database
             driver : the JDBC driver which will be used
@@ -30,3 +34,8 @@ class SparkTableLoader(SparkLoader):
         df = self._spark.read.jdbc(self._url, self._table_name, properties=self._props)
         dc = SparkDataframeContainer(self._data_container_name, self._spark, df)
         ds.insert_data(dc)
+
+    def _populate_query(self, dict: OmegaConf):
+        dict.table_name = self._table_name
+        dict.url = self._url
+        dict.props = self._props
