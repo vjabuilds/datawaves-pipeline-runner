@@ -1,1 +1,2 @@
+from .normalize_operator import NormalizeOperator
 from .structured_lambda_operator import StructuredLambdaOperator
