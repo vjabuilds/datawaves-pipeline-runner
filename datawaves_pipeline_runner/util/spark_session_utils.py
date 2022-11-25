@@ -21,15 +21,12 @@ def get_spark(hydra_path: str, config_name: str) -> SparkSession:
     if key in __spark:
         return __spark[key]
     else:
-        with hydra.initialize(config_path=hydra_path):
-            cfg = hydra.compose(config_name)
-            __spark[key] = (
-                SparkSession.builder.appName(cfg.name)
-                .master(cfg.spark.head)
-                .getOrCreate()
-            )
-            __configuration[__spark[key]] = key
-            return __spark[key]
+        cfg = hydra.compose(config_name)
+        __spark[key] = (
+            SparkSession.builder.appName(cfg.name).master(cfg.spark.head).getOrCreate()
+        )
+        __configuration[__spark[key]] = key
+        return __spark[key]
 
 
 def get_configuration(spark: SparkSession) -> Tuple[str, str]:

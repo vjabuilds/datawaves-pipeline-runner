@@ -1,5 +1,6 @@
 from typing import Dict
 
+import hydra
 import pytest
 from omegaconf import OmegaConf
 from pyspark.sql import SparkSession
@@ -72,28 +73,29 @@ def test_load_schema_spark_table(
 
 
 def test_dictionary(query: str, props: Dict[str, str]):
-    url = "jdbc:postgresql://localhost:5432/datawaves"
-    name = "test"
-    hydra_path = "../configs"
+    hydra_path = "../../../datawaves_pipeline_runner/configs"
     config_name = "config"
-    spark = get_spark(hydra_path, config_name)
+    with hydra.initialize(config_path=hydra_path):
+        url = "jdbc:postgresql://localhost:5432/datawaves"
+        name = "test"
+        spark = get_spark(hydra_path, config_name)
 
-    loader = SparkSqlLoader(name, name, spark, query, url, props)
-    read_path, read_name = get_configuration(spark)
+        loader = SparkSqlLoader(name, name, spark, query, url, props)
+        read_path, read_name = get_configuration(spark)
 
-    assert read_path == hydra_path and read_name == config_name
+        assert read_path == hydra_path and read_name == config_name
 
-    conf = loader.to_dictionary()
-    OmegaConf.register_resolver("spark_resolver", get_spark)
-    target = OmegaConf.create(
-        {
-            "name": name,
-            "_target_": "datawaves_pipeline_runner.operators.loaders.spark_loaders.spark_sql_loader.SparkSqlLoader",
-            "data_container_name": name,
-            "url": url,
-            "query": query,
-            "props": props,
-            "spark": f"${{spark_resolver:{hydra_path}, {config_name}}}",
-        }
-    )
+        conf = loader.to_dictionary()
+        OmegaConf.register_resolver("spark_resolver", get_spark)
+        target = OmegaConf.create(
+            {
+                "name": name,
+                "_target_": "datawaves_pipeline_runner.operators.loaders.spark_loaders.spark_sql_loader.SparkSqlLoader",
+                "data_container_name": name,
+                "url": url,
+                "query": query,
+                "props": props,
+                "spark": f"${{spark_resolver:{hydra_path}, {config_name}}}",
+            }
+        )
     assert conf == target
