@@ -1,14 +1,18 @@
+import inspect
+from typing import Callable, Dict, Iterable, List, Optional
+
+import pandas as pd
+
 from .field_aggregation import FieldAggregation
 from .structured_data_container import StructuredDataContainer
-from typing import Dict, List, Callable, Iterable, Optional
-import pandas as pd
-import inspect
+
 
 class PandasDataContainer(StructuredDataContainer):
     """
     A structured data container backed by a pandas dataframe.
     """
-    def __init__(self, name:str, df: pd.DataFrame):
+
+    def __init__(self, name: str, df: pd.DataFrame):
         super().__init__(name)
         self._df = df
 
@@ -35,14 +39,16 @@ class PandasDataContainer(StructuredDataContainer):
         self._df.drop(old_name, axis=1, inplace=True)
         return True
 
-    def map_field(self, field_name: str, mapping_func: Callable, new_name: Optional[str] = None):
+    def map_field(
+        self, field_name: str, mapping_func: Callable, new_name: Optional[str] = None
+    ):
         """
         Transforms the specified field using the mapping function
         - field_name - the field which is to be transformed
         - mapping_func - the function which will be applied to the field
         - new_name - optional name of the transformed data. If none, will overwrite old data
         """
-        if(new_name is None):
+        if new_name is None:
             new_name = field_name
         self._df[new_name] = self._df[field_name].apply(mapping_func)
 
@@ -62,9 +68,9 @@ class PandasDataContainer(StructuredDataContainer):
         self._df[name] = data
 
     def serialize(self, format: str, **kwargs):
-        methods = inspect.getmembers(self._df, predicate = inspect.ismethod)
-        assert 'to_' + format in [m[0] for m in methods]
-        index = [m[0] for m in methods].index('to_' + format)
+        methods = inspect.getmembers(self._df, predicate=inspect.ismethod)
+        assert "to_" + format in [m[0] for m in methods]
+        index = [m[0] for m in methods].index("to_" + format)
         methods[index][1](**kwargs)
 
     def aggregate_field(self, name: str, aggregation_function: FieldAggregation):

@@ -1,12 +1,15 @@
-from .data_container import DataContainer
 from typing import Dict
+
+from .data_container import DataContainer
+
 
 class Dataset:
     """
     A class that stores a collection of data containers
     """
+
     def __init__(self):
-        self._data_containers : Dict[str, DataContainer] = {}
+        self._data_containers: Dict[str, DataContainer] = {}
         pass
 
     def insert_data(self, dc: DataContainer):

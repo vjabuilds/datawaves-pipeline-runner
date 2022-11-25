@@ -1,14 +1,26 @@
-from .spark_loader import SparkLoader
-from ....data import SparkDataframeContainer, Dataset
-from pyspark.sql import SparkSession
 from typing import Dict
+
 from omegaconf import OmegaConf
+from pyspark.sql import SparkSession
+
+from ....data import Dataset, SparkDataframeContainer
+from .spark_loader import SparkLoader
+
 
 class SparkTableLoader(SparkLoader):
     """
     Class that produces a SparkDataframeContainer from a SQL table and inserts it into the current Dataset.
     """
-    def __init__(self, name: str, data_container_name: str, spark: SparkSession, table_name: str, url: str, props: Dict[str, str]):
+
+    def __init__(
+        self,
+        name: str,
+        data_container_name: str,
+        spark: SparkSession,
+        table_name: str,
+        url: str,
+        props: Dict[str, str],
+    ):
         """
         Constructs a new loader object.
         - name : the name of the operator

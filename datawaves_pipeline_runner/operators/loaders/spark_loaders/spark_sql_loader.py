@@ -1,11 +1,22 @@
-from .spark_loader import SparkLoader
-from pyspark.sql import SparkSession
-from ....data import Dataset, SparkDataframeContainer
 from typing import Dict
+
 from omegaconf import OmegaConf
+from pyspark.sql import SparkSession
+
+from ....data import Dataset, SparkDataframeContainer
+from .spark_loader import SparkLoader
+
 
 class SparkSqlLoader(SparkLoader):
-    def __init__(self, name: str, data_container_name: str, spark: SparkSession, query: str, url: str, props: Dict[str, str]):
+    def __init__(
+        self,
+        name: str,
+        data_container_name: str,
+        spark: SparkSession,
+        query: str,
+        url: str,
+        props: Dict[str, str],
+    ):
         """
         Constructs a new loader object.
         - name : the name of the operator
@@ -25,12 +36,14 @@ class SparkSqlLoader(SparkLoader):
         """
         Loads in the SparkDataframeContainer from the table.
         """
-        builder = self._spark.read.format('jdbc').option('url', self._url)
+        builder = self._spark.read.format("jdbc").option("url", self._url)
         for key in self._props:
             print(key)
             builder.option(key, self._props[key])
-        builder.option('query', self._query)
-        dc = SparkDataframeContainer(self._data_container_name, self._spark, builder.load())
+        builder.option("query", self._query)
+        dc = SparkDataframeContainer(
+            self._data_container_name, self._spark, builder.load()
+        )
         ds.insert_data(dc)
 
     def _populate_query(self, dict: OmegaConf):

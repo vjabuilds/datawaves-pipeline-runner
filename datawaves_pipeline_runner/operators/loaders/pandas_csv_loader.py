@@ -1,12 +1,15 @@
-from .base_loader import BaseLoader
-from ...data import Dataset, PandasDataContainer
 import pandas as pd
 from omegaconf import OmegaConf
+
+from ...data import Dataset, PandasDataContainer
+from .base_loader import BaseLoader
+
 
 class PandasCsvLoader(BaseLoader):
     """
     Class that produces a PandasDataContainer and inserts it into the current Dataset.
     """
+
     def __init__(self, name: str, data_container_name: str, csv_path: str):
         """
         Constructs a new loader object.

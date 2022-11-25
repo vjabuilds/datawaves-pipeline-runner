@@ -1,7 +1,8 @@
 import pytest
-from datawaves_pipeline_runner.operators.loggers import PrinterOperator
-from datawaves_pipeline_runner.operators.core import PipelineOperator
 from omegaconf import OmegaConf
+
+from datawaves_pipeline_runner.operators.core import PipelineOperator
+from datawaves_pipeline_runner.operators.loggers import PrinterOperator
 
 
 @pytest.mark.parametrize("count", range(10))

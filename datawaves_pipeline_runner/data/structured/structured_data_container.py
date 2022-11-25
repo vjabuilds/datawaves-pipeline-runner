@@ -1,7 +1,9 @@
 from abc import abstractmethod
+from typing import Callable, Dict, Iterable, List, Optional
+
 from ..data_container import DataContainer
-from typing import Dict, Iterable, List, Callable, Optional
 from .field_aggregation import FieldAggregation
+
 
 class StructuredDataContainer(DataContainer):
     """
@@ -33,15 +35,17 @@ class StructuredDataContainer(DataContainer):
         pass
 
     @abstractmethod
-    def map_field(self, field_name: str, mapping_func: Callable, new_name: Optional[str] = None):
+    def map_field(
+        self, field_name: str, mapping_func: Callable, new_name: Optional[str] = None
+    ):
         """
-        Transforms the specified field using the mapping function. 
+        Transforms the specified field using the mapping function.
         - field_name - the field which is to be transformed
         - mapping_func - the function which will be applied to the field
         - new_name - optional name of the transformed data. If none, will overwrite old data
         """
         pass
-    
+
     @abstractmethod
     def read_field(self, field_name: str) -> List:
         """

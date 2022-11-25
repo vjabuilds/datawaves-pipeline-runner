@@ -1,9 +1,12 @@
+from typing import Callable, Dict, Iterable, List, Optional
+
+import pyspark.sql.functions as f
+from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql.types import DoubleType
+
 from .field_aggregation import FieldAggregation
 from .structured_data_container import StructuredDataContainer
-from typing import List, Dict, Callable, Optional, Iterable
-from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.types import DoubleType
-import pyspark.sql.functions as f
+
 
 class SparkDataframeContainer(StructuredDataContainer):
     def __init__(self, name: str, spark: SparkSession, df: DataFrame):
@@ -36,13 +39,17 @@ class SparkDataframeContainer(StructuredDataContainer):
         self._df = self._df.withColumnRenamed(old_name, new_name)
         return True
 
-    def map_field(self, field_name: str, mapping_func: Callable, new_name: Optional[str] = None):
-        mapping_func = f.udf(mapping_func, DoubleType()) # TODO: currently only works for DoubleTypes, would need to
-                                                         # register function based on return type of callable
+    def map_field(
+        self, field_name: str, mapping_func: Callable, new_name: Optional[str] = None
+    ):
+        mapping_func = f.udf(
+            mapping_func, DoubleType()
+        )  # TODO: currently only works for DoubleTypes, would need to
+        # register function based on return type of callable
         if new_name is None:
             new_name = field_name
         self._df = self._df.withColumn(new_name, mapping_func(field_name))
-    
+
     def read_field(self, field_name: str) -> List:
         return [c[field_name] for c in self._df.select(field_name).collect()]
 
@@ -54,14 +61,14 @@ class SparkDataframeContainer(StructuredDataContainer):
         Currently not implemented for spark based containers.
         """
         raise NotImplementedError
-    
+
     def serialize(self, format: str, **kwargs):
-        partition_count = 1 if 'coalesce' not in kwargs else kwargs['coalesce']
-        self._df =self._df.coalesce(partition_count)
-        obj =self._df.write.format(format)
+        partition_count = 1 if "coalesce" not in kwargs else kwargs["coalesce"]
+        self._df = self._df.coalesce(partition_count)
+        obj = self._df.write.format(format)
         for key in kwargs:
             obj.option(key, kwargs[key])
         obj.save()
 
     def aggregate_field(self, name: str, aggregation_function: FieldAggregation):
-        return self._df.agg({name:aggregation_function.value}).collect()[0][0]
+        return self._df.agg({name: aggregation_function.value}).collect()[0][0]

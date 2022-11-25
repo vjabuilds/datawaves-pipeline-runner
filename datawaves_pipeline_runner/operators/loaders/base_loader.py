@@ -1,11 +1,14 @@
-from ..core import AbstractOperator
 from abc import abstractmethod
+
 from ...data import Dataset
+from ..core import AbstractOperator
+
 
 class BaseLoader(AbstractOperator):
     """
     Base class which should be inherited by all data loaders
     """
+
     def __init__(self, name: str, data_container_name: str):
         """
         Constructs a new loader object.
@@ -18,7 +21,7 @@ class BaseLoader(AbstractOperator):
     def _operate(self, ds: Dataset):
         """
         Loads the dataset in and checks if the dataset is placed in the correct location.
-        Will raise a KeyError if the dataset isn't placed correctly. 
+        Will raise a KeyError if the dataset isn't placed correctly.
         """
         self._load(ds)
         assert ds.get_data(self._data_container_name)

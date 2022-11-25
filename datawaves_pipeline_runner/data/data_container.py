@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+
 class DataContainer(ABC):
     """
     A container that holds data which can be fed to the pipeline.

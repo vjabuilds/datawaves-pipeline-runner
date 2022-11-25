@@ -1,4 +1,4 @@
-from .structured_data_container import StructuredDataContainer
+from .field_aggregation import FieldAggregation
 from .pandas_data_container import PandasDataContainer
 from .spark_data_container import SparkDataframeContainer
-from .field_aggregation import FieldAggregation
+from .structured_data_container import StructuredDataContainer

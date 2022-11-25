@@ -1,19 +1,25 @@
-from ..core import AbstractOperator
-from ...data import Dataset, StructuredDataContainer
-from ..exceptions import SerializationNotSupported
 from typing import Callable, Optional
+
 from omegaconf import OmegaConf
+
+from ...data import Dataset, StructuredDataContainer
+from ..core import AbstractOperator
+from ..exceptions import SerializationNotSupported
+
 
 class StructuredLambdaOperator(AbstractOperator):
     """
     The operator which invokes a lambda on a given DataContainer.
     """
-    def __init__(self, 
-                name: str, 
-                lambda_op: Callable, 
-                dc_name: str, 
-                field_name: str, 
-                new_name: Optional[str] = None):
+
+    def __init__(
+        self,
+        name: str,
+        lambda_op: Callable,
+        dc_name: str,
+        field_name: str,
+        new_name: Optional[str] = None,
+    ):
         """
         Constructor for the StructuredLambdaOperator.
         - name - the name of the operator
@@ -28,7 +34,6 @@ class StructuredLambdaOperator(AbstractOperator):
         self._field_name = field_name
         self._new_name = new_name
 
-    
     def _operate(self, ds: Dataset):
         """
         Executes the defined operation on the given dataset. Relies on the map_field

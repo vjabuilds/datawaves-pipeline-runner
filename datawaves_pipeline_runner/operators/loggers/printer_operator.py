@@ -1,6 +1,8 @@
-from ..core import AbstractOperator
-from ...data import Dataset
 from omegaconf import OmegaConf
+
+from ...data import Dataset
+from ..core import AbstractOperator
+
 
 class PrinterOperator(AbstractOperator):
     def __init__(self, name: str, msg: str):

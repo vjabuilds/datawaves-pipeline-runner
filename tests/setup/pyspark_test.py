@@ -1,11 +1,15 @@
-from pyspark.sql import SparkSession
 from omegaconf import DictConfig
+from pyspark.sql import SparkSession
+
 
 def test_hydra_default(hydra_cfg: DictConfig):
     """
     Tests to see if the loaded config has been loaded correctly
     """
-    assert hydra_cfg.spark == {"head": "local[*]"} and hydra_cfg.name == "datawaves-pipeline-runner"
+    assert (
+        hydra_cfg.spark == {"head": "local[*]"}
+        and hydra_cfg.name == "datawaves-pipeline-runner"
+    )
 
 
 def test_pyspark_local(spark: SparkSession):
