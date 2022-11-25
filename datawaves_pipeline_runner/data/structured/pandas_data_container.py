@@ -1,3 +1,4 @@
+from .field_aggregation import FieldAggregation
 from .structured_data_container import StructuredDataContainer
 from typing import Dict, List, Callable, Iterable, Optional
 import pandas as pd
@@ -65,3 +66,6 @@ class PandasDataContainer(StructuredDataContainer):
         assert 'to_' + format in [m[0] for m in methods]
         index = [m[0] for m in methods].index('to_' + format)
         methods[index][1](**kwargs)
+
+    def aggregate_field(self, name: str, aggregation_function: FieldAggregation):
+        return self._df[name].aggregate(aggregation_function.value)

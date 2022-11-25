@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from ..data_container import DataContainer
 from typing import Dict, Iterable, List, Callable, Optional
+from .field_aggregation import FieldAggregation
 
 class StructuredDataContainer(DataContainer):
     """
@@ -52,5 +53,13 @@ class StructuredDataContainer(DataContainer):
     def insert_field(self, name: str, data: Iterable):
         """
         Inserts a new field with the given data
+        """
+        pass
+
+    @abstractmethod
+    def aggregate_field(self, name: str, aggregation_function: FieldAggregation):
+        """
+        Applies the given reduction function on a field, giving a scalar return value.
+        - returns : a scalar value with the result of the reduce_function
         """
         pass

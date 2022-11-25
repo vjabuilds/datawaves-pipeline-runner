@@ -1,3 +1,4 @@
+from .field_aggregation import FieldAggregation
 from .structured_data_container import StructuredDataContainer
 from typing import List, Dict, Callable, Optional, Iterable
 from pyspark.sql import SparkSession, DataFrame
@@ -61,3 +62,6 @@ class SparkDataframeContainer(StructuredDataContainer):
         for key in kwargs:
             obj.option(key, kwargs[key])
         obj.save()
+
+    def aggregate_field(self, name: str, aggregation_function: FieldAggregation):
+        return self._df.agg({name:aggregation_function.value}).collect()[0][0]

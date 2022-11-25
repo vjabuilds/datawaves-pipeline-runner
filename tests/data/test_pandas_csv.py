@@ -5,6 +5,8 @@ import pandas as pd
 import uuid
 import os
 
+from datawaves_pipeline_runner.data.structured.field_aggregation import FieldAggregation
+
 @fixture
 def dataset() -> PandasDataContainer:
     """
@@ -71,3 +73,8 @@ def test_serialize(dataset: PandasDataContainer):
     for f in fields:
         assert dataset.read_field(f) == read_data.read_field(f)
     os.remove(file_name)
+
+@pytest.mark.parametrize('aggregation_function', list(FieldAggregation))
+@pytest.mark.parametrize('field_name', ['sepal length', 'sepal width', 'petal length', 'petal width'])
+def test_aggregation(dataset: PandasDataContainer, aggregation_function, field_name):
+    dataset.aggregate_field(field_name, aggregation_function)
