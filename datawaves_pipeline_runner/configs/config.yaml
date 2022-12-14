@@ -1,4 +1,5 @@
 name: datawaves-pipeline-runner
 defaults:
 - spark: local
+- datawaves: local
 - _self_

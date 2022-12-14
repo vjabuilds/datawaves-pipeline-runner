@@ -1,0 +1,4 @@
+auth-url: http://loccalhost:8080
+experimenter-url: http://localhost:8081
+username: datawaves
+password: test.123
